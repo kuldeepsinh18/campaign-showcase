@@ -61,7 +61,7 @@ export default function CampaignShowcase() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
-            className="text-neutral-400 text-sm md:text-lg uppercase tracking-[0.2em] font-light"
+            className="text-neutral-400 text-xs md:text-lg uppercase tracking-[0.2em] font-light"
           >
             Selected Visuals &amp; Motion
           </motion.p>
@@ -99,7 +99,7 @@ export default function CampaignShowcase() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="grid grid-cols-3 gap-2 md:gap-4 lg:gap-6"
+
           >
             {/* The 8 Image Posts */}
             {postsData.map((post, i) => {
@@ -184,7 +184,7 @@ export default function CampaignShowcase() {
                     loop
                     muted
                     playsInline
-                    className="w-full h-full object-cover scale-[1.01] transition-transform duration-700 group-hover:scale-105"
+                    className="w-auto h-auto max-w-[90vw] max-h-[85vh] object-contain"
                   >
                     <source src="/reel.mp4" type="video/mp4" />
                   </video>
