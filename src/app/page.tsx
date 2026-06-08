@@ -99,7 +99,7 @@ export default function CampaignShowcase() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10"
+            className="grid grid-cols-3 gap-2 md:gap-4 lg:gap-6"
           >
             {/* The 8 Image Posts */}
             {postsData.map((post, i) => {
@@ -114,7 +114,7 @@ export default function CampaignShowcase() {
                   transition={{ duration: 0.8, delay: (i % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <motion.div
-                    animate={{ 
+                    animate={{
                       scale: isSelected ? 1.08 : 1,
                     }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
@@ -122,9 +122,9 @@ export default function CampaignShowcase() {
                     onClick={() => setSelectedPost(isSelected ? null : post.id)}
                   >
                     {/* Active/Selected Glow */}
-                    <motion.div 
+                    <motion.div
                       animate={{ opacity: isSelected ? 0.8 : 0 }}
-                      className="absolute -inset-8 bg-gradient-to-tr from-neutral-800 to-neutral-900 rounded-[2.5rem] blur-2xl transition duration-500 pointer-events-none" 
+                      className="absolute -inset-8 bg-gradient-to-tr from-neutral-800 to-neutral-900 rounded-[2.5rem] blur-2xl transition duration-500 pointer-events-none"
                     />
 
                     {/* Standard Hover Glow (only visible when not selected) */}
@@ -161,7 +161,7 @@ export default function CampaignShowcase() {
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             >
               <motion.div
-                animate={{ 
+                animate={{
                   scale: selectedPost === 'reel' ? 1.08 : 1,
                 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
@@ -169,9 +169,9 @@ export default function CampaignShowcase() {
                 onClick={() => setSelectedPost(selectedPost === 'reel' ? null : 'reel')}
               >
                 {/* Active/Selected Glow */}
-                <motion.div 
+                <motion.div
                   animate={{ opacity: selectedPost === 'reel' ? 0.8 : 0 }}
-                  className="absolute -inset-8 bg-gradient-to-tr from-neutral-800 to-neutral-900 rounded-[2.5rem] blur-2xl transition duration-500 pointer-events-none" 
+                  className="absolute -inset-8 bg-gradient-to-tr from-neutral-800 to-neutral-900 rounded-[2.5rem] blur-2xl transition duration-500 pointer-events-none"
                 />
 
                 {!selectedPost && (
