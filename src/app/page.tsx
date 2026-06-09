@@ -265,7 +265,7 @@ export default function CampaignShowcase() {
           className="text-center"
         >
           <h2 className="brutalist-text text-3xl md:text-5xl text-white mb-6">
-            Crafted for Attention.
+            Looking Forward To Creating A Memorable Campaign For Your Brand
           </h2>
           <p className="text-neutral-500 text-sm tracking-widest uppercase">
             © {new Date().getFullYear()} FORWORD STUDIO
