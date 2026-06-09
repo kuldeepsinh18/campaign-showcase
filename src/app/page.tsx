@@ -153,70 +153,69 @@ export default function CampaignShowcase() {
                     </div>
                   </div>
                 </motion.div>
-        </motion.div>
-          );
+              );
             })}
 
-          {/* 3. CONTACT SECTION */}
-          <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="flex flex-col gap-2"
-              >
-                <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
-                <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                  +91 96622 50041
-                </a>
-              </motion.div>
+            {/* 3. CONTACT SECTION */}
+            <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
+              <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  className="flex flex-col gap-2"
+                >
+                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
+                  <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                    +91 96622 50041
+                  </a>
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.1 }}
-                className="flex flex-col gap-2"
-              >
-                <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
-                <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                  zalakuldipsinh366@gmail.com
-                </a>
-              </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.1 }}
+                  className="flex flex-col gap-2"
+                >
+                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
+                  <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                    zalakuldipsinh366@gmail.com
+                  </a>
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="flex flex-col gap-2"
-              >
-                <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
-                <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                  +91 96622 50041
-                </a>
-              </motion.div>
-            </div>
-          </section>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="flex flex-col gap-2"
+                >
+                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
+                  <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                    +91 96622 50041
+                  </a>
+                </motion.div>
+              </div>
+            </section>
 
-          {/* 4. FOOTER */}
-          <footer className="relative z-20 border-t border-neutral-900 py-24 md:py-32 bg-black flex flex-col items-center justify-center">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1 }}
-              className="text-center"
-            ><h2 className="brutalist-text text-lg md:text-2xl text-white mb-6 leading-tight">
-                Looking Forward To Creating A Memorable Campaign For Your Brand
-              </h2>
-              <p className="text-neutral-500 text-sm tracking-widest uppercase">
-                © {new Date().getFullYear()} FORWORD STUDIO
-              </p>
-            </motion.div>
-          </footer>
-        </main>
-        );
+            {/* 4. FOOTER */}
+            <footer className="relative z-20 border-t border-neutral-900 py-24 md:py-32 bg-black flex flex-col items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="text-center"
+              ><h2 className="brutalist-text text-lg md:text-2xl text-white mb-6 leading-tight">
+                  Looking Forward To Creating A Memorable Campaign For Your Brand
+                </h2>
+                <p className="text-neutral-500 text-sm tracking-widest uppercase">
+                  © {new Date().getFullYear()} FORWORD STUDIO
+                </p>
+              </motion.div>
+            </footer>
+          </main>
+          );
 }
