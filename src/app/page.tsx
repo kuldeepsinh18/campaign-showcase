@@ -138,6 +138,8 @@ export default function CampaignShowcase() {
                         src={post.src}
                         alt={post.alt}
                         fill
+                        quality={100}
+                        unoptimized
                         className="object-cover transition-transform duration-1000 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
@@ -154,123 +156,66 @@ export default function CampaignShowcase() {
               );
             })}
 
-            {/* The 9th Grid Item: Video Reel */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <motion.div
-                animate={{
-                  scale: selectedPost === 'reel' ? 1.08 : 1,
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className={`group relative flex flex-col gap-4 cursor-pointer w-full h-full ${selectedPost === 'reel' ? "z-50" : "z-10"}`}
-                onClick={() => setSelectedPost(selectedPost === 'reel' ? null : 'reel')}
-              >
-                {/* Active/Selected Glow */}
+            {/* 3. CONTACT SECTION */}
+            <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
+              <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
                 <motion.div
-                  animate={{ opacity: selectedPost === 'reel' ? 0.8 : 0 }}
-                  className="absolute -inset-8 bg-gradient-to-tr from-neutral-800 to-neutral-900 rounded-[2.5rem] blur-2xl transition duration-500 pointer-events-none"
-                />
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  className="flex flex-col gap-2"
+                >
+                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
+                  <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                    +91 96622 50041
+                  </a>
+                </motion.div>
 
-                {!selectedPost && (
-                  <div className="absolute -inset-4 bg-gradient-to-tr from-neutral-800 to-neutral-900 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none" />
-                )}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.1 }}
+                  className="flex flex-col gap-2"
+                >
+                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
+                  <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                    zalakuldipsinh366@gmail.com
+                  </a>
+                </motion.div>
 
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-neutral-950 shadow-2xl border border-neutral-800/60 z-10 drop-shadow-2xl">
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-auto h-auto max-w-[90vw] max-h-[85vh] object-contain"
-                  >
-                    <source src="/reel.mp4" type="video/mp4" />
-                  </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 pointer-events-none" />
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="flex flex-col gap-2"
+                >
+                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
+                  <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                    +91 96622 50041
+                  </a>
+                </motion.div>
+              </div>
+            </section>
 
-                  {/* Play Icon / Reel Indicator */}
-                  <div className="absolute top-6 right-6">
-                    <svg className="w-6 h-6 text-white drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-
-                  <div className="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
-                    <span className="text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/30 px-4 py-2 rounded-full border border-white/10 shadow-lg flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                      Reel
-                    </span>
-                  </div>
-                </div>
+            {/* 4. FOOTER */}
+            <footer className="relative z-20 border-t border-neutral-900 py-24 md:py-32 bg-black flex flex-col items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="text-center"
+              ><h2 className="brutalist-text text-lg md:text-2xl text-white mb-6 leading-tight">
+                  Looking Forward To Creating A Memorable Campaign For Your Brand
+                </h2>
+                <p className="text-neutral-500 text-sm tracking-widest uppercase">
+                  © {new Date().getFullYear()} FORWORD STUDIO
+                </p>
               </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 3. CONTACT SECTION */}
-      <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="flex flex-col gap-2"
-          >
-            <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
-            <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-              +91 96622 50041
-            </a>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="flex flex-col gap-2"
-          >
-            <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
-            <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-              zalakuldipsinh366@gmail.com
-            </a>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col gap-2"
-          >
-            <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
-            <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-              +91 96622 50041
-            </a>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 4. FOOTER */}
-      <footer className="relative z-20 border-t border-neutral-900 py-24 md:py-32 bg-black flex flex-col items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="text-center"
-        ><h2 className="brutalist-text text-lg md:text-2xl text-white mb-6 leading-tight">
-            Looking Forward To Creating A Memorable Campaign For Your Brand
-          </h2>
-          <p className="text-neutral-500 text-sm tracking-widest uppercase">
-            © {new Date().getFullYear()} FORWORD STUDIO
-          </p>
-        </motion.div>
-      </footer>
-    </main>
-  );
+            </footer>
+          </main>
+          );
 }
