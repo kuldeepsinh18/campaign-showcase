@@ -117,9 +117,10 @@ export default function CampaignShowcase() {
                   <motion.div
                     animate={{
                       scale: isSelected ? 1.6 : 1,
+                      y: isSelected ? -30 : 0,
                     }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className={`group relative flex flex-col gap-4 cursor-pointer w-full h-full ${isSelected ? "z-50" : "z-10"}`}
+                    className={`group relative flex flex-col items-center justify-center gap-4 cursor-pointer w-full h-full ${isSelected ? "z-50" : "z-10"}`}
                     onClick={() => setSelectedPost(isSelected ? null : post.id)}
                   >
                     {/* Active/Selected Glow */}
@@ -133,89 +134,89 @@ export default function CampaignShowcase() {
                       <div className="absolute -inset-4 bg-gradient-to-tr from-neutral-800 to-neutral-900 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none" />
                     )}
 
-                    <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-neutral-900 shadow-2xl border border-neutral-800/60 z-10 drop-shadow-2xl">
-                      <Image
-                        src={post.src}
-                        alt={post.alt}
-                        fill
-                        quality={100}
-                        unoptimized
-                        className="object-cover object-center transition-transform duration-1000 group-hover:scale-105"
-                        sizes="100vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
+                    <Image
+                      src={post.src}
+                      alt={post.alt}
+                      width={1200}
+                      height={1500}
+                      quality={100}
+                      unoptimized
+                      className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+                      sizes="100vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
 
-                      <div className="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
-                        <span className="text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/30 px-4 py-2 rounded-full border border-white/10 shadow-lg">
-                          Vol. {post.id.toString().padStart(2, '0')}
-                        </span>
-                      </div>
+                    <div className="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
+                      <span className="text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/30 px-4 py-2 rounded-full border border-white/10 shadow-lg">
+                        Vol. {post.id.toString().padStart(2, '0')}
+                      </span>
                     </div>
-                  </motion.div>
+                  </div>
                 </motion.div>
-              );
+        </motion.div>
+          );
             })}
 
-            {/* 3. CONTACT SECTION */}
-            <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
-              <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                  className="flex flex-col gap-2"
-                >
-                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
-                  <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                    +91 96622 50041
-                  </a>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.1 }}
-                  className="flex flex-col gap-2"
-                >
-                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
-                  <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                    zalakuldipsinh366@gmail.com
-                  </a>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="flex flex-col gap-2"
-                >
-                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
-                  <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                    +91 96622 50041
-                  </a>
-                </motion.div>
-              </div>
-            </section>
-
-            {/* 4. FOOTER */}
-            <footer className="relative z-20 border-t border-neutral-900 py-24 md:py-32 bg-black flex flex-col items-center justify-center">
+          {/* 3. CONTACT SECTION */}
+          <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
               <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 1 }}
-                className="text-center"
-              ><h2 className="brutalist-text text-lg md:text-2xl text-white mb-6 leading-tight">
-                  Looking Forward To Creating A Memorable Campaign For Your Brand
-                </h2>
-                <p className="text-neutral-500 text-sm tracking-widest uppercase">
-                  © {new Date().getFullYear()} FORWORD STUDIO
-                </p>
+                transition={{ duration: 0.8 }}
+                className="flex flex-col gap-2"
+              >
+                <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
+                <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                  +91 96622 50041
+                </a>
               </motion.div>
-            </footer>
-          </main>
-          );
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="flex flex-col gap-2"
+              >
+                <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
+                <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                  zalakuldipsinh366@gmail.com
+                </a>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex flex-col gap-2"
+              >
+                <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
+                <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                  +91 96622 50041
+                </a>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* 4. FOOTER */}
+          <footer className="relative z-20 border-t border-neutral-900 py-24 md:py-32 bg-black flex flex-col items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="text-center"
+            ><h2 className="brutalist-text text-lg md:text-2xl text-white mb-6 leading-tight">
+                Looking Forward To Creating A Memorable Campaign For Your Brand
+              </h2>
+              <p className="text-neutral-500 text-sm tracking-widest uppercase">
+                © {new Date().getFullYear()} FORWORD STUDIO
+              </p>
+            </motion.div>
+          </footer>
+        </main>
+        );
 }
