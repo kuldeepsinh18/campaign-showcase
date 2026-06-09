@@ -263,8 +263,8 @@ export default function CampaignShowcase() {
           viewport={{ once: true }}
           transition={{ duration: 1 }}
           className="text-center"
-        >
-          <h2 className="brutalist-text text-3xl md:text-5xl text-white mb-6">
+        >className="brutalist-text text-xl md:text-4xl text-white mb-6 leading-tight"
+          <h2 >
             Looking Forward To Creating A Memorable Campaign For Your Brand
           </h2>
           <p className="text-neutral-500 text-sm tracking-widest uppercase">
