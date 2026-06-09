@@ -96,6 +96,7 @@ export default function CampaignShowcase() {
 
         <div className="max-w-[1600px] mx-auto relative">
           <motion.div
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 lg:gap-6"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
