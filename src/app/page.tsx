@@ -53,9 +53,9 @@ export default function CampaignShowcase() {
           className="text-center z-10"
         >
           <h1 className="brutalist-text text-5xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-6 leading-[0.85]">
-            CAMPAIGN
+            MAHALAXMI
             <br />
-            SHOWCASE
+            MASALA
           </h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -63,7 +63,7 @@ export default function CampaignShowcase() {
             transition={{ duration: 1, delay: 1 }}
             className="text-neutral-400 text-xs md:text-lg uppercase tracking-[0.2em] font-light"
           >
-            Selected Visuals &amp; Motion
+            Campaign Showcase
           </motion.p>
         </motion.div>
 
