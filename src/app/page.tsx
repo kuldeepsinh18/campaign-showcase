@@ -116,7 +116,7 @@ export default function CampaignShowcase() {
                 >
                   <motion.div
                     animate={{
-                      scale: isSelected ? 1.08 : 1,
+                      scale: isSelected ? 1.6 : 1,
                     }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     className={`group relative flex flex-col gap-4 cursor-pointer w-full h-full ${isSelected ? "z-50" : "z-10"}`}
