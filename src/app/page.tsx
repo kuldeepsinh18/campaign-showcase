@@ -140,8 +140,8 @@ export default function CampaignShowcase() {
                         fill
                         quality={100}
                         unoptimized
-                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+                        sizes="100vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
 
