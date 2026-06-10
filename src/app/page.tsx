@@ -22,8 +22,8 @@ export default function CampaignShowcase() {
   const { scrollYProgress } = useScroll();
   const yHero = useTransform(scrollYProgress, scrollInput, scrollOutput);
 
-  // Store the ID of the selected post (number for posts, string 'reel' for video)
-  const [selectedPost, setSelectedPost] = useState<number | string | null>(null);
+  // Store the ID of the selected post
+  const [selectedPost, setSelectedPost] = useState<number | null>(null);
 
   // Handle ESC key to dismiss the selected post
   useEffect(() => {
@@ -78,144 +78,182 @@ export default function CampaignShowcase() {
         </motion.div>
       </section>
 
-      {/* 2. INSTAGRAM STYLE 3x3 GRID */}
+      {/* 2. INSTAGRAM STYLE GRID */}
       <section className="relative z-20 px-4 md:px-8 lg:px-12 py-24 bg-black">
-        {/* Subtle dim overlay for selected post */}
+        {/* DISMISS OVERLAY */}
         <AnimatePresence>
           {selectedPost && (
-            <motion.div
+            <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              className="fixed inset-0 z-30 bg-black/40 backdrop-blur-[2px]"
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md cursor-pointer"
               onClick={() => setSelectedPost(null)}
             />
           )}
         </AnimatePresence>
 
+        {/* ZOOMED POST */}
+        {selectedPost && (
+          <div className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none">
+            {postsData.map(post => {
+              if (post.id === selectedPost) {
+                return (
+                  <motion.div
+                    key={`selected-${post.id}`}
+                    layoutId={`post-${post.id}`}
+                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl pointer-events-auto cursor-pointer"
+                    style={{
+                      width: '85vw',
+                      maxWidth: 'calc(85vh * 0.8)',
+                      aspectRatio: '4/5'
+                    }}
+                    onClick={() => setSelectedPost(null)}
+                  >
+                    <Image
+                      src={post.src}
+                      alt={post.alt}
+                      fill
+                      quality={100}
+                      unoptimized
+                      priority
+                      sizes="100vw"
+                      className="object-cover object-center"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 pointer-events-none z-10" />
+                    <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 flex justify-between items-end z-20">
+                      <span className="text-sm md:text-base font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-4 py-2 md:px-6 md:py-3 rounded-full border border-white/10 shadow-lg">
+                        Vol. {post.id.toString().padStart(2, '0')}
+                      </span>
+                    </div>
+                  </motion.div>
+                )
+              }
+              return null;
+            })}
+          </div>
+        )}
+
         <div className="max-w-[1600px] mx-auto relative">
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 lg:gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-
           >
-            {/* The 8 Image Posts */}
             {postsData.map((post, i) => {
               const isSelected = selectedPost === post.id;
-
+              
               return (
                 <motion.div
                   key={post.id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, delay: (i % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.8, delay: (i % 4) * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  className={`relative aspect-[4/5] rounded-xl md:rounded-2xl transition-all duration-500 ${
+                    selectedPost && !isSelected ? 'opacity-40 blur-[2px] grayscale-[30%]' : 'opacity-100'
+                  } z-10`}
                 >
-                  <motion.div
-                    animate={{
-                      scale: isSelected ? 1.6 : 1,
-                      y: isSelected ? -30 : 0,
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className={`group relative flex flex-col items-center justify-center gap-4 cursor-pointer w-full h-full ${isSelected ? "z-50" : "z-10"}`}
-                    onClick={() => setSelectedPost(isSelected ? null : post.id)}
-                  >
-                    {/* Active/Selected Glow */}
+                  {!isSelected && (
                     <motion.div
-                      animate={{ opacity: isSelected ? 0.8 : 0 }}
-                      className="absolute -inset-8 bg-gradient-to-tr from-neutral-800 to-neutral-900 rounded-[2.5rem] blur-2xl transition duration-500 pointer-events-none"
-                    />
+                      layoutId={`post-${post.id}`}
+                      className="w-full h-full relative rounded-xl md:rounded-2xl overflow-hidden cursor-pointer group shadow-2xl shadow-transparent"
+                      onClick={() => setSelectedPost(post.id)}
+                    >
+                      {/* Standard Hover Glow */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-neutral-800 to-neutral-900 opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none mix-blend-overlay z-10" />
 
-                    {/* Standard Hover Glow (only visible when not selected) */}
-                    {!isSelected && (
-                      <div className="absolute -inset-4 bg-gradient-to-tr from-neutral-800 to-neutral-900 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none" />
-                    )}
+                      <Image
+                        src={post.src}
+                        alt={post.alt}
+                        fill
+                        quality={100}
+                        unoptimized
+                        priority
+                        sizes="100vw"
+                        className="object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+                      />
 
-                    <Image
-                      src={post.src}
-                      alt={post.alt}
-                      width={1200}
-                      height={1500}
-                      quality={100}
-                      unoptimized
-                      className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
-                      sizes="100vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
 
-                    <div className="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
-                      <span className="text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/30 px-4 py-2 rounded-full border border-white/10 shadow-lg">
-                        Vol. {post.id.toString().padStart(2, '0')}
-                      </span>
-                    </div>
-                  </div>
+                      <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 flex justify-between items-end z-20">
+                        <span className="text-xs md:text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 shadow-lg">
+                          Vol. {post.id.toString().padStart(2, '0')}
+                        </span>
+                      </div>
+                    </motion.div>
+                  )}
                 </motion.div>
               );
             })}
+          </motion.div>
+        </div>
+      </section>
 
-            {/* 3. CONTACT SECTION */}
-            <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
-              <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                  className="flex flex-col gap-2"
-                >
-                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
-                  <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                    +91 96622 50041
-                  </a>
-                </motion.div>
+      {/* 3. CONTACT SECTION */}
+      <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col gap-2"
+          >
+            <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
+            <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+              +91 96622 50041
+            </a>
+          </motion.div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.1 }}
-                  className="flex flex-col gap-2"
-                >
-                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
-                  <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                    zalakuldipsinh366@gmail.com
-                  </a>
-                </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="flex flex-col gap-2"
+          >
+            <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
+            <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+              zalakuldipsinh366@gmail.com
+            </a>
+          </motion.div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="flex flex-col gap-2"
-                >
-                  <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
-                  <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                    +91 96622 50041
-                  </a>
-                </motion.div>
-              </div>
-            </section>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex flex-col gap-2"
+          >
+            <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
+            <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+              +91 96622 50041
+            </a>
+          </motion.div>
+        </div>
+      </section>
 
-            {/* 4. FOOTER */}
-            <footer className="relative z-20 border-t border-neutral-900 py-24 md:py-32 bg-black flex flex-col items-center justify-center">
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1 }}
-                className="text-center"
-              ><h2 className="brutalist-text text-lg md:text-2xl text-white mb-6 leading-tight">
-                  Looking Forward To Creating A Memorable Campaign For Your Brand
-                </h2>
-                <p className="text-neutral-500 text-sm tracking-widest uppercase">
-                  © {new Date().getFullYear()} FORWORD STUDIO
-                </p>
-              </motion.div>
-            </footer>
-          </main>
-          );
+      {/* 4. FOOTER */}
+      <footer className="relative z-20 border-t border-neutral-900 py-24 md:py-32 bg-black flex flex-col items-center justify-center px-6">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          className="text-center"
+        >
+          <h2 className="brutalist-text text-lg md:text-2xl text-white mb-6 leading-tight max-w-2xl mx-auto">
+            Looking Forward To Creating A Memorable Campaign For Your Brand
+          </h2>
+          <p className="text-neutral-500 text-sm tracking-widest uppercase">
+            © {new Date().getFullYear()} FORWORD STUDIO
+          </p>
+        </motion.div>
+      </footer>
+    </main>
+  );
 }
