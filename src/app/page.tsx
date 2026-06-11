@@ -170,7 +170,7 @@ export default function CampaignShowcase() {
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              <span className="relative z-10">Campaign</span>
+              <span className="relative z-10">Post Showcase</span>
             </button>
             <button
               onClick={() => setActiveTab('video')}
@@ -511,39 +511,37 @@ export default function CampaignShowcase() {
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 1, duration: 0.8 }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] w-[90%] max-w-[400px] md:hidden"
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[90] w-max md:hidden"
         >
-          <div className="flex items-center justify-between gap-1 p-1.5 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 shadow-2xl">
+          <div className="flex items-center gap-1 p-1 rounded-[20px] bg-black/60 backdrop-blur-xl border border-white/10 shadow-2xl">
             <button
               onClick={() => handleTabSwitch('campaign')}
-              className={`relative flex-1 py-3 px-2 rounded-full text-[10px] uppercase tracking-widest transition-all duration-500 ${activeTab === 'campaign' ? 'text-black font-medium' : 'text-white/60 hover:text-white'}`}
+              className={`relative px-5 py-2.5 rounded-[16px] text-[12px] uppercase tracking-widest transition-all duration-500 ${activeTab === 'campaign' ? 'text-black font-medium' : 'text-white/60 hover:text-white'}`}
             >
               {activeTab === 'campaign' && (
                 <motion.div
                   layoutId="mobileActiveTabIndicator"
-                  className="absolute inset-0 bg-white rounded-full"
+                  className="absolute inset-0 bg-white rounded-[16px]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              <span className="relative z-10 flex flex-col items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <span className="relative z-10 flex items-center justify-center whitespace-nowrap">
                 Post Showcase
               </span>
             </button>
             
             <button
               onClick={() => handleTabSwitch('video')}
-              className={`relative flex-1 py-3 px-2 rounded-full text-[10px] uppercase tracking-widest transition-all duration-500 ${activeTab === 'video' ? 'text-black font-medium' : 'text-white/60 hover:text-white'}`}
+              className={`relative px-5 py-2.5 rounded-[16px] text-[12px] uppercase tracking-widest transition-all duration-500 ${activeTab === 'video' ? 'text-black font-medium' : 'text-white/60 hover:text-white'}`}
             >
               {activeTab === 'video' && (
                 <motion.div
                   layoutId="mobileActiveTabIndicator"
-                  className="absolute inset-0 bg-white rounded-full"
+                  className="absolute inset-0 bg-white rounded-[16px]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              <span className="relative z-10 flex flex-col items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+              <span className="relative z-10 flex items-center justify-center whitespace-nowrap">
                 Video Showcase
               </span>
             </button>
