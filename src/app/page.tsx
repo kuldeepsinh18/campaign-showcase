@@ -325,51 +325,13 @@ export default function CampaignShowcase() {
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="relative z-20 px-4 md:px-8 lg:px-12 pb-24 pt-8 bg-black min-h-[50vh]"
         >
-          {/* VIDEO PLAYER MODAL */}
-          {selectedVideo && (
-            <div className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none p-4 md:p-12">
-              {videosData.map(video => {
-                if (video.id === selectedVideo) {
-                  return (
-                    <motion.div
-                      key={`selected-video-${video.id}`}
-                      layoutId={`video-${video.id}`}
-                      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                      className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl pointer-events-auto bg-black border border-white/10"
-                      style={{
-                        width: video.type === 'vertical' ? 'auto' : '100%',
-                        height: video.type === 'vertical' ? '85vh' : 'auto',
-                        maxWidth: video.type === 'vertical' ? 'calc(85vh * 0.5625)' : '1200px',
-                        aspectRatio: video.type === 'vertical' ? '9/16' : '16/9',
-                      }}
-                    >
-                      <video
-                        src={video.src}
-                        autoPlay
-                        controls
-                        className="w-full h-full object-cover object-center"
-                      />
-                      <button
-                        className="absolute top-4 right-4 z-50 text-white/50 hover:text-white backdrop-blur-md bg-black/50 p-2 rounded-full border border-white/10 transition-colors"
-                        onClick={() => setSelectedVideo(null)}
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                      </button>
-                    </motion.div>
-                  )
-                }
-                return null;
-              })}
-            </div>
-          )}
-
-          <div className="max-w-[1600px] mx-auto relative">
+          <div className="max-w-[1200px] mx-auto relative">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="mb-16 md:mb-24 text-center"
+              className="mb-12 md:mb-16 text-center"
             >
               <h2 className="brutalist-text text-3xl md:text-5xl lg:text-6xl text-white tracking-tighter mb-4">
                 VIDEO SHOWCASE
@@ -380,64 +342,35 @@ export default function CampaignShowcase() {
             </motion.div>
 
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative w-full rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5 bg-neutral-900/30 p-2 md:p-4"
             >
-              {videosData.map((video, i) => {
-                const isSelected = selectedVideo === video.id;
-
-                return (
-                  <motion.div
-                    key={video.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.8, delay: (i % 2) * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    className={`relative aspect-video rounded-xl md:rounded-2xl transition-all duration-500 ${selectedVideo && !isSelected ? 'opacity-40 blur-[2px] grayscale-[30%]' : 'opacity-100'
-                      } z-10`}
-                  >
-                    {!isSelected && (
-                      <motion.div
-                        layoutId={`video-${video.id}`}
-                        className="w-full h-full relative rounded-xl md:rounded-2xl overflow-hidden cursor-pointer group shadow-2xl border border-white/5 bg-neutral-900"
-                        onClick={() => setSelectedVideo(video.id)}
-                      >
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
-
-                        <Image
-                          src={video.thumbnail}
-                          alt={video.title}
-                          fill
-                          quality={100}
-                          unoptimized
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover object-center transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100"
-                        />
-
-                        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                          <motion.div 
-                            className="w-16 h-16 md:w-20 md:h-20 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 text-white transition-transform duration-500 group-hover:scale-110 group-hover:bg-white group-hover:text-black"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                          </motion.div>
-                        </div>
-
-                        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col items-start z-20 bg-gradient-to-t from-black via-black/60 to-transparent">
-                          <span className="text-xs md:text-sm font-mono text-neutral-400 uppercase tracking-widest mb-2">
-                            {video.type === 'vertical' ? 'Vertical Reel' : 'Horizontal Video'}
-                          </span>
-                          <h3 className="text-xl md:text-2xl text-white font-light tracking-tight group-hover:text-white transition-colors">
-                            {video.title}
-                          </h3>
-                        </div>
-                      </motion.div>
-                    )}
-                  </motion.div>
-                );
-              })}
+              <div className="relative rounded-3xl overflow-hidden bg-black aspect-video w-full">
+                <video
+                  controls
+                  preload="metadata"
+                  playsInline
+                  className="w-full h-full object-cover"
+                >
+                  <source
+                    src="/videos/Mahalaxmi Masala Brand Film.mp4"
+                    type="video/mp4"
+                  />
+                </video>
+              </div>
+              <div className="px-4 py-6 md:px-8 md:py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                  <h3 className="text-xl md:text-3xl text-white font-light tracking-tight mb-2">
+                    Mahalaxmi Masala Brand Film
+                  </h3>
+                  <span className="text-[10px] md:text-xs font-mono text-neutral-500 uppercase tracking-widest">
+                    Brand Film
+                  </span>
+                </div>
+              </div>
             </motion.div>
           </div>
         </motion.section>
@@ -446,45 +379,59 @@ export default function CampaignShowcase() {
 
         {/* 4. CONTACT SECTION */}
         <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
+          <div className="max-w-7xl mx-auto">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="flex flex-col gap-2"
+              className="brutalist-text text-4xl md:text-6xl lg:text-7xl text-white tracking-tighter mb-16 md:mb-24 leading-[0.85]"
             >
-              <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
-              <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                +91 96622 50041
-              </a>
-            </motion.div>
+              CONTACT
+              <br />
+              INFO
+            </motion.h2>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="flex flex-col gap-2"
-            >
-              <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
-              <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                zalakuldipsinh366@gmail.com
-              </a>
-            </motion.div>
+            <div className="flex flex-col md:flex-row justify-between gap-16 md:gap-8">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col gap-2"
+              >
+                <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">WhatsApp</h3>
+                <a href="https://wa.me/919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                  +91 96622 50041
+                </a>
+              </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex flex-col gap-2"
-            >
-              <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
-              <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
-                +91 96622 50041
-              </a>
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="flex flex-col gap-2"
+              >
+                <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Email</h3>
+                <a href="mailto:zalakuldipsinh366@gmail.com" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                  zalakuldipsinh366@gmail.com
+                </a>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex flex-col gap-2"
+              >
+                <h3 className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">Call</h3>
+                <a href="tel:+919662250041" className="text-xl md:text-2xl text-white font-light hover:text-neutral-400 transition-colors">
+                  +91 96622 50041
+                </a>
+              </motion.div>
+            </div>
           </div>
         </section>
 
