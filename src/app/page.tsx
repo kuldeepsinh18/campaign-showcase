@@ -346,12 +346,12 @@ export default function CampaignShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative w-full rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5 bg-neutral-900/30 p-2 md:p-4"
+              className="relative w-full max-w-[400px] mx-auto rounded-[2rem] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5 bg-neutral-900/30 p-2 md:p-3"
             >
-              <div className="relative rounded-3xl overflow-hidden bg-black aspect-video w-full">
+              <div className="relative rounded-[1.5rem] overflow-hidden bg-black aspect-[9/16] w-full">
                 <video
                   controls
-                  preload="metadata"
+                  preload="auto"
                   playsInline
                   className="w-full h-full object-cover"
                 >
@@ -361,15 +361,10 @@ export default function CampaignShowcase() {
                   />
                 </video>
               </div>
-              <div className="px-4 py-6 md:px-8 md:py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                  <h3 className="text-xl md:text-3xl text-white font-light tracking-tight mb-2">
-                    Mahalaxmi Masala Brand Film
-                  </h3>
-                  <span className="text-[10px] md:text-xs font-mono text-neutral-500 uppercase tracking-widest">
-                    Brand Film
-                  </span>
-                </div>
+              <div className="px-4 py-5 md:py-6 flex flex-col justify-center items-center text-center">
+                <h3 className="text-xl md:text-2xl text-white font-light tracking-tight">
+                  REEL - 01
+                </h3>
               </div>
             </motion.div>
           </div>
@@ -385,7 +380,7 @@ export default function CampaignShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="brutalist-text text-4xl md:text-6xl lg:text-7xl text-white tracking-tighter mb-16 md:mb-24 leading-[0.85]"
+              className="brutalist-text text-2xl md:text-4xl text-white tracking-tighter mb-16 md:mb-24 leading-[0.85]"
             >
               CONTACT
               <br />
