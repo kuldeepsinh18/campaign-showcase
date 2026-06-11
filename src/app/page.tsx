@@ -15,6 +15,11 @@ const postsData = [
   { id: 8, src: "/images/Post8.png", alt: "Campaign Post 8" },
 ];
 
+const videosData = [
+  { id: 1, src: "/reel.mp4", thumbnail: "/images/Post1.png", title: "Campaign Reel 1", type: "vertical" },
+  { id: 2, src: "/reel.mp4", thumbnail: "/images/Post2.png", title: "Commercial Edit", type: "horizontal" },
+];
+
 const scrollInput = [0, 1];
 const scrollOutput = [0, 300];
 
@@ -55,20 +60,12 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="brutalist-text text-3xl md:text-5xl lg:text-6xl text-white tracking-tighter mb-4 leading-[0.85]"
+          className="brutalist-text text-3xl md:text-5xl lg:text-6xl text-white tracking-tighter mb-12 leading-[0.85]"
         >
-          MAHALAXMI
+          CAMPAIGN
           <br />
-          MASALA
+          SHOWCASE
         </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-neutral-400 text-[10px] md:text-xs uppercase tracking-[0.2em] font-light mb-12"
-        >
-          Campaign Showcase
-        </motion.p>
         
         {/* Loading Line */}
         <div className="w-48 md:w-64 h-[1px] bg-neutral-900 overflow-hidden relative">
@@ -90,11 +87,14 @@ export default function CampaignShowcase() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<'campaign' | 'video'>('campaign');
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setSelectedPost(null);
+        setSelectedVideo(null);
       }
     };
 
@@ -103,6 +103,14 @@ export default function CampaignShowcase() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  const handleTabSwitch = (tab: 'campaign' | 'video') => {
+    setActiveTab(tab);
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+  };
 
   return (
     <>
@@ -125,18 +133,10 @@ export default function CampaignShowcase() {
             className="text-center z-10"
           >
             <h1 className="brutalist-text text-5xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-6 leading-[0.85]">
-              MAHALAXMI
+              CAMPAIGN
               <br />
-              MASALA
+              SHOWCASE
             </h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isLoading ? 0 : 1 }}
-              transition={{ duration: 1, delay: isLoading ? 0 : 0.5 }}
-              className="text-neutral-400 text-xs md:text-lg uppercase tracking-[0.2em] font-light"
-            >
-              Campaign Showcase
-            </motion.p>
           </motion.div>
 
           <motion.div
@@ -150,18 +150,68 @@ export default function CampaignShowcase() {
           </motion.div>
         </section>
 
-        {/* 2. INSTAGRAM STYLE GRID */}
-        <section className="relative z-20 px-4 md:px-8 lg:px-12 py-24 bg-black">
-          {/* DISMISS OVERLAY */}
+        {/* TABS SECTION (DESKTOP) */}
+        <section className="relative z-20 px-6 pt-12 pb-8 bg-black hidden md:flex justify-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="flex items-center gap-2 md:gap-4 border border-white/10 p-1 md:p-1.5 rounded-full bg-neutral-950/80 backdrop-blur-md"
+          >
+            <button
+              onClick={() => setActiveTab('campaign')}
+              className={`relative px-6 py-2.5 md:px-8 md:py-3 rounded-full text-xs md:text-sm uppercase tracking-widest transition-colors duration-500 ${activeTab === 'campaign' ? 'text-black font-medium' : 'text-white hover:text-neutral-300'}`}
+            >
+              {activeTab === 'campaign' && (
+                <motion.div
+                  layoutId="activeTabIndicator"
+                  className="absolute inset-0 bg-white rounded-full"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">Campaign</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('video')}
+              className={`relative px-6 py-2.5 md:px-8 md:py-3 rounded-full text-xs md:text-sm uppercase tracking-widest transition-colors duration-500 ${activeTab === 'video' ? 'text-black font-medium' : 'text-white hover:text-neutral-300'}`}
+            >
+              {activeTab === 'video' && (
+                <motion.div
+                  layoutId="activeTabIndicator"
+                  className="absolute inset-0 bg-white rounded-full"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">Video Showcase</span>
+            </button>
+          </motion.div>
+        </section>
+
+        <AnimatePresence mode="wait">
+          {/* 2. INSTAGRAM STYLE GRID */}
+          {activeTab === 'campaign' && (
+            <motion.section 
+              key="campaign"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="relative z-20 px-4 md:px-8 lg:px-12 pb-24 pt-8 bg-black min-h-[50vh]"
+            >
+              {/* DISMISS OVERLAY */}
           <AnimatePresence>
-            {selectedPost && (
+            {(selectedPost || selectedVideo) && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md cursor-pointer"
-                onClick={() => setSelectedPost(null)}
+                className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md cursor-pointer"
+                onClick={() => {
+                  setSelectedPost(null);
+                  setSelectedVideo(null);
+                }}
               />
             )}
           </AnimatePresence>
@@ -197,7 +247,7 @@ export default function CampaignShowcase() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 pointer-events-none z-10" />
                       <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 flex justify-between items-end z-20">
                         <span className="text-sm md:text-base font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-4 py-2 md:px-6 md:py-3 rounded-full border border-white/10 shadow-lg">
-                          Vol. {post.id.toString().padStart(2, '0')}
+                          POST - {post.id.toString().padStart(2, '0')}
                         </span>
                       </div>
                     </motion.div>
@@ -252,7 +302,7 @@ export default function CampaignShowcase() {
 
                         <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 flex justify-between items-end z-20">
                           <span className="text-xs md:text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 shadow-lg">
-                            Vol. {post.id.toString().padStart(2, '0')}
+                            POST - {post.id.toString().padStart(2, '0')}
                           </span>
                         </div>
                       </motion.div>
@@ -262,9 +312,139 @@ export default function CampaignShowcase() {
               })}
             </motion.div>
           </div>
-        </section>
+        </motion.section>
+        )}
 
-        {/* 3. CONTACT SECTION */}
+        {/* 3. VIDEO SHOWCASE SECTION */}
+        {activeTab === 'video' && (
+        <motion.section 
+          key="video"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-20 px-4 md:px-8 lg:px-12 pb-24 pt-8 bg-black min-h-[50vh]"
+        >
+          {/* VIDEO PLAYER MODAL */}
+          {selectedVideo && (
+            <div className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none p-4 md:p-12">
+              {videosData.map(video => {
+                if (video.id === selectedVideo) {
+                  return (
+                    <motion.div
+                      key={`selected-video-${video.id}`}
+                      layoutId={`video-${video.id}`}
+                      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl pointer-events-auto bg-black border border-white/10"
+                      style={{
+                        width: video.type === 'vertical' ? 'auto' : '100%',
+                        height: video.type === 'vertical' ? '85vh' : 'auto',
+                        maxWidth: video.type === 'vertical' ? 'calc(85vh * 0.5625)' : '1200px',
+                        aspectRatio: video.type === 'vertical' ? '9/16' : '16/9',
+                      }}
+                    >
+                      <video
+                        src={video.src}
+                        autoPlay
+                        controls
+                        className="w-full h-full object-cover object-center"
+                      />
+                      <button
+                        className="absolute top-4 right-4 z-50 text-white/50 hover:text-white backdrop-blur-md bg-black/50 p-2 rounded-full border border-white/10 transition-colors"
+                        onClick={() => setSelectedVideo(null)}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                      </button>
+                    </motion.div>
+                  )
+                }
+                return null;
+              })}
+            </div>
+          )}
+
+          <div className="max-w-[1600px] mx-auto relative">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="mb-16 md:mb-24 text-center"
+            >
+              <h2 className="brutalist-text text-3xl md:text-5xl lg:text-6xl text-white tracking-tighter mb-4">
+                VIDEO SHOWCASE
+              </h2>
+              <p className="text-neutral-400 text-xs md:text-sm uppercase tracking-[0.2em] font-light">
+                Selected Motion & Commercial Work
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+            >
+              {videosData.map((video, i) => {
+                const isSelected = selectedVideo === video.id;
+
+                return (
+                  <motion.div
+                    key={video.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.8, delay: (i % 2) * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    className={`relative aspect-video rounded-xl md:rounded-2xl transition-all duration-500 ${selectedVideo && !isSelected ? 'opacity-40 blur-[2px] grayscale-[30%]' : 'opacity-100'
+                      } z-10`}
+                  >
+                    {!isSelected && (
+                      <motion.div
+                        layoutId={`video-${video.id}`}
+                        className="w-full h-full relative rounded-xl md:rounded-2xl overflow-hidden cursor-pointer group shadow-2xl border border-white/5 bg-neutral-900"
+                        onClick={() => setSelectedVideo(video.id)}
+                      >
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
+
+                        <Image
+                          src={video.thumbnail}
+                          alt={video.title}
+                          fill
+                          quality={100}
+                          unoptimized
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-cover object-center transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                        />
+
+                        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                          <motion.div 
+                            className="w-16 h-16 md:w-20 md:h-20 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 text-white transition-transform duration-500 group-hover:scale-110 group-hover:bg-white group-hover:text-black"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                          </motion.div>
+                        </div>
+
+                        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col items-start z-20 bg-gradient-to-t from-black via-black/60 to-transparent">
+                          <span className="text-xs md:text-sm font-mono text-neutral-400 uppercase tracking-widest mb-2">
+                            {video.type === 'vertical' ? 'Vertical Reel' : 'Horizontal Video'}
+                          </span>
+                          <h3 className="text-xl md:text-2xl text-white font-light tracking-tight group-hover:text-white transition-colors">
+                            {video.title}
+                          </h3>
+                        </div>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
+        </motion.section>
+        )}
+        </AnimatePresence>
+
+        {/* 4. CONTACT SECTION */}
         <section className="relative z-20 border-t border-neutral-900 px-6 py-24 md:py-32 bg-black">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
             <motion.div
@@ -325,6 +505,50 @@ export default function CampaignShowcase() {
             </p>
           </motion.div>
         </footer>
+
+        {/* MOBILE BOTTOM NAVIGATION */}
+        <motion.div 
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] w-[90%] max-w-[400px] md:hidden"
+        >
+          <div className="flex items-center justify-between gap-1 p-1.5 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 shadow-2xl">
+            <button
+              onClick={() => handleTabSwitch('campaign')}
+              className={`relative flex-1 py-3 px-2 rounded-full text-[10px] uppercase tracking-widest transition-all duration-500 ${activeTab === 'campaign' ? 'text-black font-medium' : 'text-white/60 hover:text-white'}`}
+            >
+              {activeTab === 'campaign' && (
+                <motion.div
+                  layoutId="mobileActiveTabIndicator"
+                  className="absolute inset-0 bg-white rounded-full"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10 flex flex-col items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                Post Showcase
+              </span>
+            </button>
+            
+            <button
+              onClick={() => handleTabSwitch('video')}
+              className={`relative flex-1 py-3 px-2 rounded-full text-[10px] uppercase tracking-widest transition-all duration-500 ${activeTab === 'video' ? 'text-black font-medium' : 'text-white/60 hover:text-white'}`}
+            >
+              {activeTab === 'video' && (
+                <motion.div
+                  layoutId="mobileActiveTabIndicator"
+                  className="absolute inset-0 bg-white rounded-full"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10 flex flex-col items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                Video Showcase
+              </span>
+            </button>
+          </div>
+        </motion.div>
       </main>
     </>
   );
