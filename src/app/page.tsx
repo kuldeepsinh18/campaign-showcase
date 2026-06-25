@@ -206,7 +206,7 @@ export default function CampaignShowcase() {
               </p>
             </motion.div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-6">
               {/* WhatsApp Button */}
               <motion.a
                 href="https://wa.me/918866035771"
@@ -217,10 +217,10 @@ export default function CampaignShowcase() {
                 viewport={{ once: true }}
                 whileHover={{ y: -4, scale: 1.05 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="flex items-center gap-3 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group justify-center cursor-pointer"
+                className="flex items-center gap-2 md:gap-3 px-6 py-2.5 md:px-8 md:py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group justify-center cursor-pointer"
               >
-                <WhatsappIcon className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-500" />
-                <span className="text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">WhatsApp</span>
+                <WhatsappIcon className="w-4 h-4 md:w-5 md:h-5 text-white group-hover:scale-110 transition-transform duration-500" />
+                <span className="text-[11px] md:text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">WhatsApp</span>
               </motion.a>
 
               {/* Email Button */}
@@ -231,10 +231,10 @@ export default function CampaignShowcase() {
                 viewport={{ once: true }}
                 whileHover={{ y: -4, scale: 1.05 }}
                 transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="flex items-center gap-3 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group justify-center cursor-pointer"
+                className="flex items-center gap-2 md:gap-3 px-6 py-2.5 md:px-8 md:py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group justify-center cursor-pointer"
               >
-                <Mail className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-500" />
-                <span className="text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">Email</span>
+                <Mail className="w-4 h-4 md:w-5 md:h-5 text-white group-hover:scale-110 transition-transform duration-500" />
+                <span className="text-[11px] md:text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">Email</span>
               </motion.a>
             </div>
           </div>
