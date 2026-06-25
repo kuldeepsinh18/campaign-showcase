@@ -84,13 +84,25 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 export default function CampaignShowcase() {
   const { scrollYProgress } = useScroll();
   const yHero = useTransform(scrollYProgress, scrollInput, scrollOutput);
+  
   const [isLoading, setIsLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    if (sessionStorage.getItem('hasSeenPreloader')) {
+      setIsLoading(false);
+    }
+  }, []);
 
   return (
     <>
       <AnimatePresence>
-        {isLoading && (
-          <Preloader onComplete={() => setIsLoading(false)} />
+        {isClient && isLoading && (
+          <Preloader onComplete={() => {
+            setIsLoading(false);
+            sessionStorage.setItem('hasSeenPreloader', 'true');
+          }} />
         )}
       </AnimatePresence>
 

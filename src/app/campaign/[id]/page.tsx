@@ -24,61 +24,6 @@ const WhatsappIcon = ({ className }: { className?: string }) => (
 const scrollInput = [0, 1];
 const scrollOutput = [0, 300];
 
-function Preloader({ onComplete, title }: { onComplete: () => void; title: string }) {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const duration = 1500;
-    const interval = 20;
-    const steps = duration / interval;
-    let currentStep = 0;
-
-    const timer = setInterval(() => {
-      currentStep++;
-      setProgress((currentStep / steps) * 100);
-
-      if (currentStep >= steps) {
-        clearInterval(timer);
-        setTimeout(() => {
-          onComplete();
-        }, 300);
-      }
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, [onComplete]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center px-6"
-    >
-      <div className="text-center z-10 flex flex-col items-center justify-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="brutalist-text text-3xl md:text-5xl lg:text-6xl text-white tracking-tighter mb-12 leading-[0.85]"
-        >
-          {title.toUpperCase()}
-        </motion.h1>
-
-        {/* Loading Line */}
-        <div className="w-48 md:w-64 h-[1px] bg-neutral-900 overflow-hidden relative">
-          <motion.div
-            className="absolute top-0 left-0 h-full bg-white"
-            initial={{ width: "0%" }}
-            animate={{ width: `${progress}%` }}
-            transition={{ ease: "linear", duration: 0.1 }}
-          />
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 export default function CampaignShowcase() {
   const params = useParams();
   const router = useRouter();
@@ -88,7 +33,6 @@ export default function CampaignShowcase() {
   const { scrollYProgress } = useScroll();
   const yHero = useTransform(scrollYProgress, scrollInput, scrollOutput);
 
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
 
   useEffect(() => {
@@ -114,13 +58,7 @@ export default function CampaignShowcase() {
 
   return (
     <>
-      <AnimatePresence>
-        {isLoading && (
-          <Preloader onComplete={() => setIsLoading(false)} title={campaign.title} />
-        )}
-      </AnimatePresence>
-
-      <main className={`relative bg-black min-h-screen selection:bg-white selection:text-black ${isLoading ? 'h-screen overflow-hidden' : ''}`}>
+      <main className="relative bg-black min-h-screen selection:bg-white selection:text-black">
         <div className="noise-overlay" />
 
         {/* NAVIGATION */}
@@ -136,8 +74,8 @@ export default function CampaignShowcase() {
           <motion.div
             style={{ y: yHero }}
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: isLoading ? 0 : 1, y: isLoading ? 30 : 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: isLoading ? 0 : 0.2 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             className="text-center z-10"
           >
             <h1 className="brutalist-text text-5xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-6 leading-[0.85]">
@@ -152,8 +90,8 @@ export default function CampaignShowcase() {
 
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: isLoading ? 0 : 1 }}
-            transition={{ delay: isLoading ? 0 : 1.2, duration: 1 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 1 }}
             className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           >
             <span className="text-[10px] uppercase tracking-widest text-neutral-500">Scroll</span>
@@ -181,36 +119,54 @@ export default function CampaignShowcase() {
           {selectedPost && (
             <div className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none">
               {campaign.media.map(item => {
-                if (item.id === selectedPost && item.type === 'post') {
+                if (item.id === selectedPost) {
                   return (
                     <motion.div
                       key={`selected-${item.id}`}
                       layoutId={`media-${item.id}`}
                       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                      className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl pointer-events-auto cursor-pointer"
+                      className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl pointer-events-auto bg-neutral-900"
                       style={{
                         width: '85vw',
-                        maxWidth: 'calc(85vh * 0.8)',
-                        aspectRatio: '4/5'
+                        maxWidth: item.type === 'post' ? 'calc(85vh * 0.8)' : 'calc(85vh * 0.5625)',
+                        aspectRatio: item.type === 'post' ? '4/5' : '9/16'
                       }}
-                      onClick={() => setSelectedPost(null)}
+                      onClick={(e) => {
+                        // Allow clicking image to close, but not video so controls work
+                        if (item.type === 'post') {
+                          setSelectedPost(null);
+                        }
+                      }}
                     >
-                      <Image
-                        src={item.src}
-                        alt={item.alt || item.title}
-                        fill
-                        quality={100}
-                        unoptimized
-                        priority
-                        sizes="100vw"
-                        className="object-cover object-center"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 pointer-events-none z-10" />
-                      <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 flex justify-between items-end z-20">
-                        <span className="text-sm md:text-base font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-4 py-2 md:px-6 md:py-3 rounded-full border border-white/10 shadow-lg">
-                          {item.title}
-                        </span>
-                      </div>
+                      {item.type === 'post' ? (
+                        <>
+                          <Image
+                            src={item.src}
+                            alt={item.alt || item.title}
+                            fill
+                            quality={100}
+                            unoptimized
+                            priority
+                            sizes="100vw"
+                            className="object-cover object-center cursor-pointer"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 pointer-events-none z-10" />
+                          <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 flex justify-between items-end z-20 pointer-events-none">
+                            <span className="text-sm md:text-base font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-4 py-2 md:px-6 md:py-3 rounded-full border border-white/10 shadow-lg">
+                              {item.title}
+                            </span>
+                          </div>
+                        </>
+                      ) : (
+                        <video
+                          controls
+                          autoPlay
+                          playsInline
+                          className="w-full h-full object-cover"
+                        >
+                          <source src={item.src} type="video/mp4" />
+                        </video>
+                      )}
                     </motion.div>
                   )
                 }
@@ -228,7 +184,8 @@ export default function CampaignShowcase() {
             >
               {campaign.media.map((item, i) => {
                 const isSelected = selectedPost === item.id;
-                const aspectClass = item.type === 'post' ? 'aspect-[4/5]' : 'aspect-[9/16]';
+                // Both posts and videos use 4:5 aspect ratio in the grid to match size exactly
+                const aspectClass = 'aspect-[4/5]';
 
                 return (
                   <motion.div
@@ -243,46 +200,41 @@ export default function CampaignShowcase() {
                   >
                     {!isSelected && (
                       <motion.div
-                        layoutId={item.type === 'post' ? `media-${item.id}` : undefined}
-                        className="w-full h-full relative rounded-xl md:rounded-2xl overflow-hidden group shadow-2xl shadow-transparent"
-                        onClick={() => {
-                          if (item.type === 'post') {
-                            setSelectedPost(item.id);
-                          }
-                        }}
+                        layoutId={`media-${item.id}`}
+                        className="w-full h-full relative rounded-xl md:rounded-2xl overflow-hidden group shadow-2xl shadow-transparent cursor-pointer"
+                        onClick={() => setSelectedPost(item.id)}
                       >
+                        <div className="absolute inset-0 bg-gradient-to-tr from-neutral-800 to-neutral-900 opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none mix-blend-overlay z-10" />
+                        
                         {item.type === 'post' ? (
-                          <>
-                            <div className="absolute inset-0 bg-gradient-to-tr from-neutral-800 to-neutral-900 opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none mix-blend-overlay z-10" />
-                            <Image
-                              src={item.src}
-                              alt={item.alt || item.title}
-                              fill
-                              quality={100}
-                              unoptimized
-                              priority={i < 4}
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                              className="object-cover object-center transition-transform duration-1000 group-hover:scale-105 cursor-pointer"
-                            />
-                          </>
+                          <Image
+                            src={item.src}
+                            alt={item.alt || item.title}
+                            fill
+                            quality={100}
+                            unoptimized
+                            priority={i < 4}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                            className="object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+                          />
                         ) : (
-                          <div className="w-full h-full bg-neutral-900">
-                            <video
-                              controls
-                              preload="auto"
-                              playsInline
-                              poster={item.thumbnail}
-                              className="w-full h-full object-cover"
-                            >
-                              <source src={item.src} type="video/mp4" />
-                            </video>
-                          </div>
+                          <video
+                            preload="metadata"
+                            playsInline
+                            muted
+                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
+                          >
+                            <source src={item.src} type="video/mp4" />
+                          </video>
                         )}
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
 
                         <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 flex justify-between items-end z-20 pointer-events-none">
-                          <span className="text-xs md:text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 shadow-lg">
+                          <span className="text-xs md:text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 shadow-lg flex items-center gap-2">
+                            {item.type === 'video' && (
+                              <svg className="w-3 h-3 md:w-4 md:h-4 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            )}
                             {item.title}
                           </span>
                         </div>
