@@ -85,23 +85,23 @@ export default function CampaignShowcase() {
   const { scrollYProgress } = useScroll();
   const yHero = useTransform(scrollYProgress, scrollInput, scrollOutput);
   
-  const [isLoading, setIsLoading] = useState(true);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-    if (sessionStorage.getItem('hasSeenPreloader')) {
-      setIsLoading(false);
+  // Synchronously check sessionStorage to avoid flash and re-runs on navigation
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !sessionStorage.getItem("hasSeenPreloader");
     }
-  }, []);
+    return true;
+  });
 
   return (
     <>
       <AnimatePresence>
-        {isClient && isLoading && (
+        {isLoading && (
           <Preloader onComplete={() => {
             setIsLoading(false);
-            sessionStorage.setItem('hasSeenPreloader', 'true');
+            if (typeof window !== "undefined") {
+              sessionStorage.setItem("hasSeenPreloader", "true");
+            }
           }} />
         )}
       </AnimatePresence>
@@ -182,25 +182,25 @@ export default function CampaignShowcase() {
         {/* 3. CONTACT SECTION */}
         <section className="relative z-20 border-t border-neutral-900 px-4 md:px-8 py-24 md:py-32 bg-black overflow-hidden">
           {/* Subtle Ambient Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-white/[0.02] blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-white/[0.02] blur-[100px] rounded-full pointer-events-none" />
           
-          <div className="max-w-4xl mx-auto relative z-10">
+          <div className="max-w-2xl mx-auto relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="text-center mb-16 md:mb-20"
+              className="text-center mb-12 md:mb-16"
             >
-              <h2 className="brutalist-text text-3xl md:text-5xl lg:text-6xl text-white tracking-tighter mb-4">
+              <h2 className="brutalist-text text-2xl md:text-4xl lg:text-5xl text-white tracking-tighter mb-3">
                 CONTACT INFO
               </h2>
-              <p className="text-neutral-400 text-xs md:text-sm uppercase tracking-[0.2em] font-light">
+              <p className="text-neutral-400 text-[10px] md:text-xs uppercase tracking-[0.2em] font-light">
                 Get in touch with us
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {/* WhatsApp Card */}
               <motion.a
                 href="https://wa.me/918866035771"
@@ -209,16 +209,16 @@ export default function CampaignShowcase() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -8, scale: 1.02 }}
+                whileHover={{ y: -6, scale: 1.02 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center text-center gap-6 p-10 md:p-14 rounded-[2rem] md:rounded-[3rem] bg-neutral-900/40 backdrop-blur-xl border border-white/5 hover:border-white/20 hover:bg-neutral-800/40 hover:shadow-[0_0_40px_rgba(255,255,255,0.05)] transition-all group"
+                className="flex flex-col items-center text-center gap-4 p-8 md:p-10 rounded-[1.5rem] md:rounded-[2rem] bg-neutral-900/40 backdrop-blur-xl border border-white/5 hover:border-white/10 hover:bg-neutral-800/40 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] transition-all group"
               >
-                <div className="p-5 md:p-6 bg-white/5 rounded-full group-hover:bg-white/10 group-hover:scale-110 transition-all duration-500">
-                  <WhatsappIcon className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                <div className="p-4 bg-white/5 rounded-full group-hover:bg-white/10 group-hover:scale-110 transition-all duration-500">
+                  <WhatsappIcon className="w-6 h-6 md:w-7 md:h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xs md:text-sm font-mono text-neutral-400 uppercase tracking-widest mb-3 group-hover:text-white transition-colors">WhatsApp</h3>
-                  <p className="text-xl md:text-2xl text-white font-light tracking-wide">
+                  <h3 className="text-[10px] md:text-xs font-mono text-neutral-400 uppercase tracking-widest mb-2 group-hover:text-white transition-colors">WhatsApp</h3>
+                  <p className="text-lg md:text-xl text-white font-light tracking-wide">
                     +91 88660 35771
                   </p>
                 </div>
@@ -230,16 +230,16 @@ export default function CampaignShowcase() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -8, scale: 1.02 }}
+                whileHover={{ y: -6, scale: 1.02 }}
                 transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center text-center gap-6 p-10 md:p-14 rounded-[2rem] md:rounded-[3rem] bg-neutral-900/40 backdrop-blur-xl border border-white/5 hover:border-white/20 hover:bg-neutral-800/40 hover:shadow-[0_0_40px_rgba(255,255,255,0.05)] transition-all group"
+                className="flex flex-col items-center text-center gap-4 p-8 md:p-10 rounded-[1.5rem] md:rounded-[2rem] bg-neutral-900/40 backdrop-blur-xl border border-white/5 hover:border-white/10 hover:bg-neutral-800/40 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] transition-all group"
               >
-                <div className="p-5 md:p-6 bg-white/5 rounded-full group-hover:bg-white/10 group-hover:scale-110 transition-all duration-500">
-                  <Mail className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                <div className="p-4 bg-white/5 rounded-full group-hover:bg-white/10 group-hover:scale-110 transition-all duration-500">
+                  <Mail className="w-6 h-6 md:w-7 md:h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xs md:text-sm font-mono text-neutral-400 uppercase tracking-widest mb-3 group-hover:text-white transition-colors">Email</h3>
-                  <p className="text-xl md:text-2xl text-white font-light tracking-wide break-all">
+                  <h3 className="text-[10px] md:text-xs font-mono text-neutral-400 uppercase tracking-widest mb-2 group-hover:text-white transition-colors">Email</h3>
+                  <p className="text-lg md:text-xl text-white font-light tracking-wide break-all">
                     zalahardip70@gmail.com
                   </p>
                 </div>
