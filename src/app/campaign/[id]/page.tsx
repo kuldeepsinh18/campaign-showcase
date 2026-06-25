@@ -71,6 +71,23 @@ export default function CampaignShowcase() {
 
         {/* 1. HERO SECTION */}
         <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden z-10 px-6">
+          {/* Cinematic Background */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={campaign.coverImage}
+              alt={`${campaign.title} Cover`}
+              fill
+              quality={100}
+              priority
+              unoptimized
+              className="object-cover object-center scale-105"
+            />
+            {/* Dark Overlay & Subtle Blur */}
+            <div className="absolute inset-0 bg-black/65 backdrop-blur-[6px]" />
+            {/* Gradient to blend seamlessly into the grid below */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black" />
+          </div>
+
           <motion.div
             style={{ y: yHero }}
             initial={{ opacity: 0, y: 30 }}
@@ -78,7 +95,7 @@ export default function CampaignShowcase() {
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             className="text-center z-10"
           >
-            <h1 className="brutalist-text text-5xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-6 leading-[0.85]">
+            <h1 className="brutalist-text font-bold text-4xl md:text-6xl lg:text-7xl text-white tracking-tighter mb-6 leading-[0.85] drop-shadow-2xl text-center">
               {campaign.title.split(' ').map((word, i) => (
                 <span key={i}>
                   {word.toUpperCase()}
@@ -268,49 +285,35 @@ export default function CampaignShowcase() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {/* WhatsApp Card */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
+              {/* WhatsApp Button */}
               <motion.a
                 href="https://wa.me/918866035771"
                 target="_blank"
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center text-center gap-4 p-8 md:p-10 rounded-[1.5rem] md:rounded-[2rem] bg-neutral-900/40 backdrop-blur-xl border border-white/5 hover:border-white/10 hover:bg-neutral-800/40 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] transition-all group"
+                whileHover={{ y: -4, scale: 1.05 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center gap-3 px-8 py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group w-full sm:w-auto justify-center cursor-pointer"
               >
-                <div className="p-4 bg-white/5 rounded-full group-hover:bg-white/10 group-hover:scale-110 transition-all duration-500">
-                  <WhatsappIcon className="w-6 h-6 md:w-7 md:h-7 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-[10px] md:text-xs font-mono text-neutral-400 uppercase tracking-widest mb-2 group-hover:text-white transition-colors">WhatsApp</h3>
-                  <p className="text-lg md:text-xl text-white font-light tracking-wide">
-                    +91 88660 35771
-                  </p>
-                </div>
+                <WhatsappIcon className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-500" />
+                <span className="text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">WhatsApp</span>
               </motion.a>
 
-              {/* Email Card */}
+              {/* Email Button */}
               <motion.a
                 href="mailto:zalahardip70@gmail.com"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center text-center gap-4 p-8 md:p-10 rounded-[1.5rem] md:rounded-[2rem] bg-neutral-900/40 backdrop-blur-xl border border-white/5 hover:border-white/10 hover:bg-neutral-800/40 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] transition-all group"
+                whileHover={{ y: -4, scale: 1.05 }}
+                transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center gap-3 px-8 py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group w-full sm:w-auto justify-center cursor-pointer"
               >
-                <div className="p-4 bg-white/5 rounded-full group-hover:bg-white/10 group-hover:scale-110 transition-all duration-500">
-                  <Mail className="w-6 h-6 md:w-7 md:h-7 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-[10px] md:text-xs font-mono text-neutral-400 uppercase tracking-widest mb-2 group-hover:text-white transition-colors">Email</h3>
-                  <p className="text-lg md:text-xl text-white font-light tracking-wide break-all">
-                    zalahardip70@gmail.com
-                  </p>
-                </div>
+                <Mail className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-500" />
+                <span className="text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">Email</span>
               </motion.a>
             </div>
           </div>
