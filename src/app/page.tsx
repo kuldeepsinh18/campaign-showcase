@@ -58,7 +58,7 @@ export default function CampaignShowcase() {
         {/* 1. HERO SECTION */}
         <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden z-10 px-6">
           <motion.div
-            style={{ y: yHero }}
+            style={{ y: yHero, willChange: "transform, opacity" }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
@@ -92,6 +92,7 @@ export default function CampaignShowcase() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
               >
                 <Link href={`/campaign/${campaign.id}`} className="block relative aspect-[4/5] rounded-xl md:rounded-2xl overflow-hidden group shadow-2xl shadow-transparent cursor-pointer">
                   

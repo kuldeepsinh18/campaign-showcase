@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useInView } from "framer-motion";
 import NextImage, { ImageProps } from "next/image";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, memo, useRef, useCallback } from "react";
 import { Mail, Phone, ArrowLeft } from "lucide-react";
 
 const Image = (props: ImageProps) => {
@@ -47,6 +47,88 @@ const WhatsappIcon = ({ className }: { className?: string }) => (
 const scrollInput = [0, 1];
 const scrollOutput = [0, 300];
 
+const LazyVideo = memo(({ item }: { item: any }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "200px" });
+
+  return (
+    <div ref={ref} className="w-full h-full relative">
+      {isInView && (
+        <video
+          preload="metadata"
+          playsInline={true}
+          muted={true}
+          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
+          style={{ willChange: "transform", transform: "translateZ(0)" }}
+        >
+          <source src={`${item.src}#t=0.1`} type="video/mp4" />
+        </video>
+      )}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+        <div className="w-[52px] h-[52px] md:w-16 md:h-16 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] transform transition-all duration-500 group-hover:scale-110 group-hover:bg-black/50 group-hover:border-white/40" style={{ willChange: "transform", transform: "translateZ(0)" }}>
+          <svg className="w-5 h-5 md:w-6 md:h-6 text-white fill-white transition-transform duration-500 group-hover:scale-95" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+});
+LazyVideo.displayName = "LazyVideo";
+
+const MediaGridItem = memo(({ item, i, isSelected, onClick }: any) => {
+  const aspectClass = 'aspect-[4/5]';
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.8, delay: (i % 4) * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative ${aspectClass} rounded-xl md:rounded-2xl transition-all duration-500 media-item ${isSelected ? 'is-selected' : ''} z-10`}
+      style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
+    >
+      {!isSelected && (
+        <motion.div
+          layoutId={`media-${item.id}`}
+          className="w-full h-full relative rounded-xl md:rounded-2xl overflow-hidden group shadow-2xl shadow-transparent cursor-pointer"
+          onClick={() => onClick(item.id)}
+          style={{ willChange: "transform", transform: "translateZ(0)" }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-tr from-neutral-800 to-neutral-900 opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none mix-blend-overlay z-10" />
+          
+          {item.type === 'post' ? (
+            <Image
+              src={item.src}
+              alt={item.alt || item.title}
+              fill
+              quality={100}
+              unoptimized
+              priority={i < 4}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              className="object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+              style={{ willChange: "transform", transform: "translateZ(0)" }}
+            />
+          ) : (
+            <LazyVideo item={item} />
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
+
+          <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 flex justify-between items-end z-20 pointer-events-none">
+            <span className="text-xs md:text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 shadow-lg flex items-center gap-2">
+              {item.type === 'video' && (
+                <svg className="w-3 h-3 md:w-4 md:h-4 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              )}
+              {item.title}
+            </span>
+          </div>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+});
+MediaGridItem.displayName = "MediaGridItem";
+
 export default function CampaignShowcase() {
   const params = useParams();
   const router = useRouter();
@@ -59,6 +141,12 @@ export default function CampaignShowcase() {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [videoError, setVideoError] = useState(false);
   const [videoLoading, setVideoLoading] = useState(true);
+
+  const handleItemClick = useCallback((id: string) => {
+    setSelectedPost(id);
+    setVideoError(false);
+    setVideoLoading(true);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -278,88 +366,21 @@ export default function CampaignShowcase() {
         <section className="relative z-20 px-4 md:px-8 lg:px-12 pb-24 pt-8 bg-black min-h-[50vh]">
           <div className="max-w-[1600px] mx-auto relative">
             <motion.div
-              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5 xl:gap-6"
+              className={`grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5 xl:gap-6 ${selectedPost ? 'has-selection' : ''}`}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
+              style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
             >
-              {campaign.media.map((item, i) => {
-                const isSelected = selectedPost === item.id;
-                // Both posts and videos use 4:5 aspect ratio in the grid to match size exactly
-                const aspectClass = 'aspect-[4/5]';
-
-                return (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.8, delay: (i % 4) * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    className={`relative ${aspectClass} rounded-xl md:rounded-2xl transition-all duration-500 ${
-                      selectedPost && !isSelected ? 'opacity-40 blur-[2px] grayscale-[30%]' : 'opacity-100'
-                    } z-10`}
-                  >
-                    {!isSelected && (
-                      <motion.div
-                        layoutId={`media-${item.id}`}
-                        className="w-full h-full relative rounded-xl md:rounded-2xl overflow-hidden group shadow-2xl shadow-transparent cursor-pointer"
-                        onClick={() => {
-                          setSelectedPost(item.id);
-                          setVideoError(false);
-                          setVideoLoading(true);
-                        }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-tr from-neutral-800 to-neutral-900 opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none mix-blend-overlay z-10" />
-                        
-                        {item.type === 'post' ? (
-                          <Image
-                            src={item.src}
-                            alt={item.alt || item.title}
-                            fill
-                            quality={100}
-                            unoptimized
-                            priority={i < 4}
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                            className="object-cover object-center transition-transform duration-1000 group-hover:scale-105"
-                          />
-                        ) : (
-                          <>
-                            <video
-                              preload="metadata"
-                              playsInline
-                              muted
-                              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
-                            >
-                              {/* Appending #t=0.1 forces mobile browsers to lazy-load just the 1st frame as a thumbnail */}
-                              <source src={`${item.src}#t=0.1`} type="video/mp4" />
-                            </video>
-
-                            {/* Premium Play Button Overlay */}
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                              <div className="w-[52px] h-[52px] md:w-16 md:h-16 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] transform transition-all duration-500 group-hover:scale-110 group-hover:bg-black/50 group-hover:border-white/40">
-                                <svg className="w-5 h-5 md:w-6 md:h-6 text-white fill-white transition-transform duration-500 group-hover:scale-95" viewBox="0 0 24 24">
-                                  <path d="M8 5v14l11-7z"/>
-                                </svg>
-                              </div>
-                            </div>
-                          </>
-                        )}
-
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
-
-                        <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 flex justify-between items-end z-20 pointer-events-none">
-                          <span className="text-xs md:text-sm font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 shadow-lg flex items-center gap-2">
-                            {item.type === 'video' && (
-                              <svg className="w-3 h-3 md:w-4 md:h-4 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            )}
-                            {item.title}
-                          </span>
-                        </div>
-                      </motion.div>
-                    )}
-                  </motion.div>
-                );
-              })}
+              {campaign.media.map((item, i) => (
+                <MediaGridItem
+                  key={item.id}
+                  item={item}
+                  i={i}
+                  isSelected={selectedPost === item.id}
+                  onClick={handleItemClick}
+                />
+              ))}
             </motion.div>
           </div>
         </section>
