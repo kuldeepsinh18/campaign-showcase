@@ -46,96 +46,13 @@ const WhatsappIcon = ({ className }: { className?: string }) => (
 const scrollInput = [0, 1];
 const scrollOutput = [0, 300];
 
-function Preloader({ onComplete }: { onComplete: () => void }) {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    // 2 seconds duration
-    const duration = 2000;
-    const interval = 20;
-    const steps = duration / interval;
-    let currentStep = 0;
-
-    const timer = setInterval(() => {
-      currentStep++;
-      setProgress((currentStep / steps) * 100);
-
-      if (currentStep >= steps) {
-        clearInterval(timer);
-        setTimeout(() => {
-          onComplete();
-        }, 300);
-      }
-    }, interval);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center px-6"
-    >
-      <div className="text-center z-10 flex flex-col items-center justify-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="brutalist-text text-3xl md:text-5xl lg:text-6xl text-white tracking-tighter mb-12 leading-[0.85]"
-        >
-          CAMPAIGN
-          <br />
-          SHOWCASE
-        </motion.h1>
-
-        {/* Loading Line */}
-        <div className="w-48 md:w-64 h-[1px] bg-neutral-900 overflow-hidden relative">
-          <motion.div
-            className="absolute top-0 left-0 h-full bg-white"
-            initial={{ width: "0%" }}
-            animate={{ width: `${progress}%` }}
-            transition={{ ease: "linear", duration: 0.1 }}
-          />
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 export default function CampaignShowcase() {
   const { scrollYProgress } = useScroll();
   const yHero = useTransform(scrollYProgress, scrollInput, scrollOutput);
-  
-  // Always initialize identically for server and client to prevent hydration crashes
-  const [isLoading, setIsLoading] = useState(true);
-  const [showPreloader, setShowPreloader] = useState(false);
-
-  useEffect(() => {
-    // Run only on client after hydration
-    if (sessionStorage.getItem("hasSeenPreloader")) {
-      // If seen, skip preloader and instantly reveal page
-      setIsLoading(false);
-    } else {
-      // First time visitor, trigger preloader
-      setShowPreloader(true);
-    }
-  }, []);
 
   return (
     <>
-      <AnimatePresence>
-        {showPreloader && (
-          <Preloader onComplete={() => {
-            setShowPreloader(false);
-            setIsLoading(false);
-            sessionStorage.setItem("hasSeenPreloader", "true");
-          }} />
-        )}
-      </AnimatePresence>
-
-      <main className={`relative bg-black min-h-screen selection:bg-white selection:text-black ${isLoading ? 'h-screen overflow-hidden' : ''}`}>
+      <main className="relative bg-black min-h-screen selection:bg-white selection:text-black">
         <div className="noise-overlay" />
 
         {/* 1. HERO SECTION */}
@@ -143,8 +60,8 @@ export default function CampaignShowcase() {
           <motion.div
             style={{ y: yHero }}
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: isLoading ? 0 : 1, y: isLoading ? 30 : 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: isLoading ? 0 : 0.2 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             className="text-center z-10"
           >
             <h1 className="brutalist-text text-5xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-6 leading-[0.85]">
@@ -156,8 +73,8 @@ export default function CampaignShowcase() {
 
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: isLoading ? 0 : 1 }}
-            transition={{ delay: isLoading ? 0 : 1.2, duration: 1 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 1 }}
             className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           >
             <span className="text-[10px] uppercase tracking-widest text-neutral-500">Scroll</span>
