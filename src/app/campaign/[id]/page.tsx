@@ -1,9 +1,32 @@
 "use client";
 
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import NextImage, { ImageProps } from "next/image";
 import { useState, useEffect } from "react";
 import { Mail, Phone, ArrowLeft } from "lucide-react";
+
+const Image = (props: ImageProps) => {
+  const [error, setError] = useState(false);
+
+  if (error) {
+    return (
+      <div className={`w-full h-full flex flex-col items-center justify-center bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 ${props.className || ''}`}>
+        <span className="text-neutral-500 font-mono text-[10px] md:text-xs uppercase tracking-widest text-center px-4">Image Unavailable</span>
+      </div>
+    );
+  }
+
+  return (
+    <NextImage
+      {...props}
+      onError={(e) => {
+        console.error(`Failed to load image: ${props.src}`);
+        setError(true);
+        if (props.onError) props.onError(e);
+      }}
+    />
+  );
+};
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getCampaignById, Campaign } from "../../../data/campaigns";
@@ -36,22 +59,6 @@ export default function CampaignShowcase() {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [videoError, setVideoError] = useState(false);
   const [videoLoading, setVideoLoading] = useState(true);
-
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    if (selectedPost && videoLoading) {
-      const isVideo = campaign?.media.find(m => m.id === selectedPost)?.type === 'video';
-      if (isVideo) {
-        timeout = setTimeout(() => {
-          setVideoError(true);
-          setVideoLoading(false);
-        }, 5000);
-      }
-    }
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [selectedPost, videoLoading, campaign]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -165,19 +172,38 @@ export default function CampaignShowcase() {
                         </div>
                       )}
                       <video
+                        ref={(el) => {
+                          if (el) {
+                            el.defaultMuted = true;
+                            el.muted = true;
+                          }
+                        }}
                         preload="metadata"
-                        playsInline
-                        muted
+                        playsInline={true}
+                        muted={true}
                         controls
                         autoPlay
+                        onLoadStart={(e) => {
+                          const target = e.currentTarget as any;
+                          target._loadTimer = setTimeout(() => {
+                            if (target.readyState < 3) {
+                              setVideoError(true);
+                              setVideoLoading(false);
+                            }
+                          }, 5000);
+                        }}
                         onLoadedData={() => {
                           // Data loaded, but wait for canPlay to remove loader
                         }}
-                        onCanPlay={() => {
+                        onCanPlay={(e) => {
+                          const target = e.currentTarget as any;
+                          if (target._loadTimer) clearTimeout(target._loadTimer);
                           setVideoLoading(false);
                           setVideoError(false);
                         }}
-                        onError={() => {
+                        onError={(e) => {
+                          const target = e.currentTarget as any;
+                          if (target._loadTimer) clearTimeout(target._loadTimer);
                           setVideoError(true);
                           setVideoLoading(false);
                         }}
