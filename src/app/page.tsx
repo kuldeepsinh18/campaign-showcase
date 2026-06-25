@@ -85,23 +85,29 @@ export default function CampaignShowcase() {
   const { scrollYProgress } = useScroll();
   const yHero = useTransform(scrollYProgress, scrollInput, scrollOutput);
   
-  // Synchronously check sessionStorage to avoid flash and re-runs on navigation
-  const [isLoading, setIsLoading] = useState(() => {
-    if (typeof window !== "undefined") {
-      return !sessionStorage.getItem("hasSeenPreloader");
+  // Always initialize identically for server and client to prevent hydration crashes
+  const [isLoading, setIsLoading] = useState(true);
+  const [showPreloader, setShowPreloader] = useState(false);
+
+  useEffect(() => {
+    // Run only on client after hydration
+    if (sessionStorage.getItem("hasSeenPreloader")) {
+      // If seen, skip preloader and instantly reveal page
+      setIsLoading(false);
+    } else {
+      // First time visitor, trigger preloader
+      setShowPreloader(true);
     }
-    return true;
-  });
+  }, []);
 
   return (
     <>
       <AnimatePresence>
-        {isLoading && (
+        {showPreloader && (
           <Preloader onComplete={() => {
+            setShowPreloader(false);
             setIsLoading(false);
-            if (typeof window !== "undefined") {
-              sessionStorage.setItem("hasSeenPreloader", "true");
-            }
+            sessionStorage.setItem("hasSeenPreloader", "true");
           }} />
         )}
       </AnimatePresence>

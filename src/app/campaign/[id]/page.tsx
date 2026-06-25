@@ -206,7 +206,7 @@ export default function CampaignShowcase() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ duration: 0.8, delay: (i % 4) * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    className={`relative w-full ${aspectClass} rounded-xl md:rounded-2xl transition-all duration-500 ${
+                    className={`relative ${aspectClass} rounded-xl md:rounded-2xl transition-all duration-500 ${
                       selectedPost && !isSelected ? 'opacity-40 blur-[2px] grayscale-[30%]' : 'opacity-100'
                     } z-10`}
                   >
