@@ -291,7 +291,7 @@ export default function CampaignShowcase() {
                 viewport={{ once: true }}
                 whileHover={{ y: -4, scale: 1.05 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="flex items-center gap-3 px-8 py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group w-full sm:w-auto justify-center cursor-pointer"
+                className="flex items-center gap-3 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group justify-center cursor-pointer"
               >
                 <WhatsappIcon className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-500" />
                 <span className="text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">WhatsApp</span>
@@ -305,7 +305,7 @@ export default function CampaignShowcase() {
                 viewport={{ once: true }}
                 whileHover={{ y: -4, scale: 1.05 }}
                 transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="flex items-center gap-3 px-8 py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group w-full sm:w-auto justify-center cursor-pointer"
+                className="flex items-center gap-3 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group justify-center cursor-pointer"
               >
                 <Mail className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-500" />
                 <span className="text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">Email</span>

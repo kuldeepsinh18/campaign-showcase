@@ -166,12 +166,12 @@ export default function CampaignShowcase() {
                     unoptimized
                     priority={i < 3}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+                    className="object-cover object-center transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
 
-                  <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col items-start z-20">
+                  <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col items-start z-20 pointer-events-none">
                     <span className="text-xs md:text-sm font-mono text-white/70 uppercase tracking-widest mb-2">
                       Case Study
                     </span>
@@ -217,7 +217,7 @@ export default function CampaignShowcase() {
                 viewport={{ once: true }}
                 whileHover={{ y: -4, scale: 1.05 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="flex items-center gap-3 px-8 py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group w-full sm:w-auto justify-center cursor-pointer"
+                className="flex items-center gap-3 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group justify-center cursor-pointer"
               >
                 <WhatsappIcon className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-500" />
                 <span className="text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">WhatsApp</span>
@@ -231,7 +231,7 @@ export default function CampaignShowcase() {
                 viewport={{ once: true }}
                 whileHover={{ y: -4, scale: 1.05 }}
                 transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="flex items-center gap-3 px-8 py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group w-full sm:w-auto justify-center cursor-pointer"
+                className="flex items-center gap-3 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-neutral-900/40 backdrop-blur-xl border border-white/10 hover:border-white/30 hover:bg-neutral-800/60 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group justify-center cursor-pointer"
               >
                 <Mail className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-500" />
                 <span className="text-sm font-mono text-white/90 uppercase tracking-widest group-hover:text-white transition-colors">Email</span>
