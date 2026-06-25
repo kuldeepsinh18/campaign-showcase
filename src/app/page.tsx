@@ -46,7 +46,7 @@ const WhatsappIcon = ({ className }: { className?: string }) => (
 const scrollInput = [0, 1];
 const scrollOutput = [0, 300];
 
-export default function CampaignShowcase() {
+export default function HomePage() {
   const { scrollYProgress } = useScroll();
   const yHero = useTransform(scrollYProgress, scrollInput, scrollOutput);
 

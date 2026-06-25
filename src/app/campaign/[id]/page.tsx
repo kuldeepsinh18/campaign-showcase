@@ -129,7 +129,7 @@ const MediaGridItem = memo(({ item, i, isSelected, onClick }: any) => {
 });
 MediaGridItem.displayName = "MediaGridItem";
 
-export default function CampaignShowcase() {
+export default function CampaignDetailPage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
