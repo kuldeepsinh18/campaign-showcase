@@ -257,15 +257,26 @@ export default function CampaignShowcase() {
                             className="object-cover object-center transition-transform duration-1000 group-hover:scale-105"
                           />
                         ) : (
-                          <video
-                            preload="metadata"
-                            playsInline
-                            muted
-                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
-                          >
-                            {/* Appending #t=0.1 forces mobile browsers to lazy-load just the 1st frame as a thumbnail */}
-                            <source src={`${item.src}#t=0.1`} type="video/mp4" />
-                          </video>
+                          <>
+                            <video
+                              preload="metadata"
+                              playsInline
+                              muted
+                              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
+                            >
+                              {/* Appending #t=0.1 forces mobile browsers to lazy-load just the 1st frame as a thumbnail */}
+                              <source src={`${item.src}#t=0.1`} type="video/mp4" />
+                            </video>
+
+                            {/* Premium Play Button Overlay */}
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                              <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all duration-500 group-hover:scale-110 group-hover:bg-black/50 group-hover:border-white/40">
+                                <svg className="w-5 h-5 md:w-7 md:h-7 text-white fill-current ml-1 transition-transform duration-500 group-hover:scale-95" viewBox="0 0 24 24">
+                                  <path d="M8 5v14l11-7z"/>
+                                </svg>
+                              </div>
+                            </div>
+                          </>
                         )}
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
