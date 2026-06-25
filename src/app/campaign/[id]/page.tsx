@@ -95,13 +95,8 @@ export default function CampaignShowcase() {
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             className="text-center z-10"
           >
-            <h1 className="brutalist-text font-bold text-4xl md:text-6xl lg:text-7xl text-white tracking-tighter mb-6 leading-[0.85] drop-shadow-2xl text-center">
-              {campaign.title.split(' ').map((word, i) => (
-                <span key={i}>
-                  {word.toUpperCase()}
-                  <br />
-                </span>
-              ))}
+            <h1 className={`font-semibold text-4xl md:text-5xl lg:text-6xl text-white tracking-wide mb-6 leading-tight drop-shadow-2xl text-center uppercase ${campaign.id !== 'mahalaxmi-masala' ? 'whitespace-nowrap' : ''}`}>
+              {campaign.title}
             </h1>
           </motion.div>
 
@@ -194,7 +189,7 @@ export default function CampaignShowcase() {
 
           <div className="max-w-[1600px] mx-auto relative">
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8"
+              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5 xl:gap-6"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
