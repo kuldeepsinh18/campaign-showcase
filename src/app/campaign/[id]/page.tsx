@@ -35,6 +35,23 @@ export default function CampaignShowcase() {
 
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [videoError, setVideoError] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(true);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (selectedPost && videoLoading) {
+      const isVideo = campaign?.media.find(m => m.id === selectedPost)?.type === 'video';
+      if (isVideo) {
+        timeout = setTimeout(() => {
+          setVideoError(true);
+          setVideoLoading(false);
+        }, 5000);
+      }
+    }
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [selectedPost, videoLoading, campaign]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -49,6 +66,17 @@ export default function CampaignShowcase() {
     };
   }, []);
 
+  useEffect(() => {
+    if (selectedPost) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedPost]);
+
   if (!campaign) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white">
@@ -59,6 +87,114 @@ export default function CampaignShowcase() {
 
   return (
     <>
+      {/* DISMISS OVERLAY */}
+      <AnimatePresence>
+        {selectedPost && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[9999] bg-black cursor-pointer"
+            onClick={() => setSelectedPost(null)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ZOOMED POST */}
+      {selectedPost && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center pointer-events-none">
+          {campaign.media.map(item => {
+            if (item.id === selectedPost) {
+              return (
+                <motion.div
+                  key={`selected-${item.id}`}
+                  layoutId={`media-${item.id}`}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl pointer-events-auto bg-neutral-900"
+                  style={{
+                    width: '85vw',
+                    maxWidth: item.type === 'post' ? 'calc(85vh * 0.8)' : 'calc(85vh * 0.5625)',
+                    aspectRatio: item.type === 'post' ? '4/5' : '9/16'
+                  }}
+                  onClick={(e) => {
+                    // Allow clicking image to close, but not video so controls work
+                    if (item.type === 'post') {
+                      setSelectedPost(null);
+                    }
+                  }}
+                >
+                  {item.type === 'post' ? (
+                    <>
+                      <Image
+                        src={item.src}
+                        alt={item.alt || item.title}
+                        fill
+                        quality={100}
+                        unoptimized
+                        priority
+                        sizes="100vw"
+                        className="object-cover object-center cursor-pointer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 pointer-events-none z-10" />
+                      <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 flex justify-between items-end z-20 pointer-events-none">
+                        <span className="text-sm md:text-base font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-4 py-2 md:px-6 md:py-3 rounded-full border border-white/10 shadow-lg">
+                          {item.title}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="w-full h-full relative flex items-center justify-center bg-black">
+                      {/* Loading Spinner / Error Fallback */}
+                      {(videoLoading || videoError) && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center z-20 bg-black gap-4 px-6 text-center">
+                          {videoError ? (
+                            <div className="flex flex-col items-center gap-2">
+                              <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-2 border border-red-500/30">
+                                <span className="text-red-500 font-bold text-xl">!</span>
+                              </div>
+                              <span className="text-xs md:text-sm font-mono text-white/90 uppercase tracking-widest">Video format not supported</span>
+                              <span className="text-[10px] md:text-xs text-white/50 max-w-[250px] leading-relaxed mt-1">This reel requires H.264 Web Optimized MP4 encoding to play on mobile.</span>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-center gap-4">
+                              <div className="w-10 h-10 border-4 border-white/20 border-t-white/100 rounded-full animate-spin" />
+                              <span className="text-[10px] md:text-xs font-mono text-white/50 uppercase tracking-widest">Loading Reel...</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <video
+                        preload="metadata"
+                        playsInline
+                        muted
+                        controls
+                        autoPlay
+                        onLoadedData={() => {
+                          // Data loaded, but wait for canPlay to remove loader
+                        }}
+                        onCanPlay={() => {
+                          setVideoLoading(false);
+                          setVideoError(false);
+                        }}
+                        onError={() => {
+                          setVideoError(true);
+                          setVideoLoading(false);
+                        }}
+                        className={`w-full h-full object-cover relative z-10 transition-opacity duration-300 ${videoLoading ? 'opacity-0' : 'opacity-100'}`}
+                      >
+                        <source src={item.src} type="video/mp4" />
+                      </video>
+                    </div>
+                  )}
+                </motion.div>
+              )
+            }
+            return null;
+          })}
+        </div>
+      )}
+
       <main className="relative bg-black min-h-screen selection:bg-white selection:text-black">
         <div className="noise-overlay" />
 
@@ -114,103 +250,6 @@ export default function CampaignShowcase() {
 
         {/* 2. UNIFIED MEDIA GRID (MASONRY) */}
         <section className="relative z-20 px-4 md:px-8 lg:px-12 pb-24 pt-8 bg-black min-h-[50vh]">
-          {/* DISMISS OVERLAY */}
-          <AnimatePresence>
-            {selectedPost && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md cursor-pointer"
-                onClick={() => setSelectedPost(null)}
-              />
-            )}
-          </AnimatePresence>
-
-          {/* ZOOMED POST */}
-          {selectedPost && (
-            <div className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none">
-              {campaign.media.map(item => {
-                if (item.id === selectedPost) {
-                  return (
-                    <motion.div
-                      key={`selected-${item.id}`}
-                      layoutId={`media-${item.id}`}
-                      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                      className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl pointer-events-auto bg-neutral-900"
-                      style={{
-                        width: '85vw',
-                        maxWidth: item.type === 'post' ? 'calc(85vh * 0.8)' : 'calc(85vh * 0.5625)',
-                        aspectRatio: item.type === 'post' ? '4/5' : '9/16'
-                      }}
-                      onClick={(e) => {
-                        // Allow clicking image to close, but not video so controls work
-                        if (item.type === 'post') {
-                          setSelectedPost(null);
-                        }
-                      }}
-                    >
-                      {item.type === 'post' ? (
-                        <>
-                          <Image
-                            src={item.src}
-                            alt={item.alt || item.title}
-                            fill
-                            quality={100}
-                            unoptimized
-                            priority
-                            sizes="100vw"
-                            className="object-cover object-center cursor-pointer"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 pointer-events-none z-10" />
-                          <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 flex justify-between items-end z-20 pointer-events-none">
-                            <span className="text-sm md:text-base font-mono text-white/90 uppercase tracking-widest backdrop-blur-md bg-black/40 px-4 py-2 md:px-6 md:py-3 rounded-full border border-white/10 shadow-lg">
-                              {item.title}
-                            </span>
-                          </div>
-                        </>
-                      ) : (
-                        <div className="w-full h-full relative flex items-center justify-center bg-black">
-                          {/* Loading Spinner / Error Fallback Behind Video */}
-                          <div className="absolute inset-0 flex flex-col items-center justify-center z-0 gap-4 px-6 text-center">
-                            {videoError ? (
-                              <div className="flex flex-col items-center gap-2">
-                                <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-2 border border-red-500/30">
-                                  <span className="text-red-500 font-bold text-xl">!</span>
-                                </div>
-                                <span className="text-xs md:text-sm font-mono text-white/90 uppercase tracking-widest">Video format not supported</span>
-                                <span className="text-[10px] md:text-xs text-white/50 max-w-[250px] leading-relaxed mt-1">This reel requires H.264 Web Optimized MP4 encoding to play on mobile.</span>
-                              </div>
-                            ) : (
-                              <div className="flex flex-col items-center gap-4">
-                                <div className="w-10 h-10 border-4 border-white/20 border-t-white/100 rounded-full animate-spin" />
-                                <span className="text-[10px] md:text-xs font-mono text-white/50 uppercase tracking-widest">Loading Reel...</span>
-                              </div>
-                            )}
-                          </div>
-                          <video
-                            preload="metadata"
-                            playsInline
-                            muted
-                            controls
-                            autoPlay
-                            onError={() => setVideoError(true)}
-                            onLoadedData={() => setVideoError(false)}
-                            className="w-full h-full object-cover relative z-10"
-                          >
-                            <source src={item.src} type="video/mp4" />
-                          </video>
-                        </div>
-                      )}
-                    </motion.div>
-                  )
-                }
-                return null;
-              })}
-            </div>
-          )}
-
           <div className="max-w-[1600px] mx-auto relative">
             <motion.div
               className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5 xl:gap-6"
@@ -241,6 +280,7 @@ export default function CampaignShowcase() {
                         onClick={() => {
                           setSelectedPost(item.id);
                           setVideoError(false);
+                          setVideoLoading(true);
                         }}
                       >
                         <div className="absolute inset-0 bg-gradient-to-tr from-neutral-800 to-neutral-900 opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none mix-blend-overlay z-10" />
@@ -270,8 +310,8 @@ export default function CampaignShowcase() {
 
                             {/* Premium Play Button Overlay */}
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                              <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all duration-500 group-hover:scale-110 group-hover:bg-black/50 group-hover:border-white/40">
-                                <svg className="w-5 h-5 md:w-7 md:h-7 text-white fill-current ml-1 transition-transform duration-500 group-hover:scale-95" viewBox="0 0 24 24">
+                              <div className="w-[52px] h-[52px] md:w-16 md:h-16 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] transform transition-all duration-500 group-hover:scale-110 group-hover:bg-black/50 group-hover:border-white/40">
+                                <svg className="w-5 h-5 md:w-6 md:h-6 text-white fill-white transition-transform duration-500 group-hover:scale-95" viewBox="0 0 24 24">
                                   <path d="M8 5v14l11-7z"/>
                                 </svg>
                               </div>
