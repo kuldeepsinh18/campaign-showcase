@@ -34,6 +34,7 @@ export default function CampaignShowcase() {
   const yHero = useTransform(scrollYProgress, scrollInput, scrollOutput);
 
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
+  const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -171,10 +172,22 @@ export default function CampaignShowcase() {
                         </>
                       ) : (
                         <div className="w-full h-full relative flex items-center justify-center bg-black">
-                          {/* Loading Spinner Behind Video */}
-                          <div className="absolute inset-0 flex flex-col items-center justify-center z-0 gap-4">
-                            <div className="w-10 h-10 border-4 border-white/20 border-t-white/100 rounded-full animate-spin" />
-                            <span className="text-[10px] md:text-xs font-mono text-white/50 uppercase tracking-widest">Loading Reel...</span>
+                          {/* Loading Spinner / Error Fallback Behind Video */}
+                          <div className="absolute inset-0 flex flex-col items-center justify-center z-0 gap-4 px-6 text-center">
+                            {videoError ? (
+                              <div className="flex flex-col items-center gap-2">
+                                <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-2 border border-red-500/30">
+                                  <span className="text-red-500 font-bold text-xl">!</span>
+                                </div>
+                                <span className="text-xs md:text-sm font-mono text-white/90 uppercase tracking-widest">Video format not supported</span>
+                                <span className="text-[10px] md:text-xs text-white/50 max-w-[250px] leading-relaxed mt-1">This reel requires H.264 Web Optimized MP4 encoding to play on mobile.</span>
+                              </div>
+                            ) : (
+                              <div className="flex flex-col items-center gap-4">
+                                <div className="w-10 h-10 border-4 border-white/20 border-t-white/100 rounded-full animate-spin" />
+                                <span className="text-[10px] md:text-xs font-mono text-white/50 uppercase tracking-widest">Loading Reel...</span>
+                              </div>
+                            )}
                           </div>
                           <video
                             preload="metadata"
@@ -182,6 +195,8 @@ export default function CampaignShowcase() {
                             muted
                             controls
                             autoPlay
+                            onError={() => setVideoError(true)}
+                            onLoadedData={() => setVideoError(false)}
                             className="w-full h-full object-cover relative z-10"
                           >
                             <source src={item.src} type="video/mp4" />
@@ -223,7 +238,10 @@ export default function CampaignShowcase() {
                       <motion.div
                         layoutId={`media-${item.id}`}
                         className="w-full h-full relative rounded-xl md:rounded-2xl overflow-hidden group shadow-2xl shadow-transparent cursor-pointer"
-                        onClick={() => setSelectedPost(item.id)}
+                        onClick={() => {
+                          setSelectedPost(item.id);
+                          setVideoError(false);
+                        }}
                       >
                         <div className="absolute inset-0 bg-gradient-to-tr from-neutral-800 to-neutral-900 opacity-0 group-hover:opacity-40 transition duration-1000 group-hover:duration-500 pointer-events-none mix-blend-overlay z-10" />
                         
