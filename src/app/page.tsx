@@ -113,9 +113,6 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
 
                   <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col items-start z-20 pointer-events-none">
-                    <span className="text-xs md:text-sm font-mono text-white/70 uppercase tracking-widest mb-2">
-                      Case Study
-                    </span>
                     <h2 className="text-2xl md:text-3xl lg:text-4xl text-white font-medium tracking-tight brutalist-text transform transition-transform duration-500 group-hover:translate-y-[-4px]">
                       {campaign.title}
                     </h2>
